@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">GoEuro</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="date">Date:</string>
+    <string name="search">Search</string>
+    <string name="search_warning">Search is no yet implemented</string>
+</resources>

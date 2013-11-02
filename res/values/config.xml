@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="autocomplete_url">http://pre.dev.goeuro.de:12345/api/v1/suggest/position/en/name/{0}</string>
+    <integer name="accuracy_meters">1000</integer>
+    <string name="location_mode">BOTH</string>
+</resources>
