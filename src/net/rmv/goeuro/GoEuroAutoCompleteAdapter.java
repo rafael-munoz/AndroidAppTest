@@ -21,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 
@@ -36,6 +38,27 @@ public class GoEuroAutoCompleteAdapter extends ArrayAdapter<String> implements F
 	public GoEuroAutoCompleteAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 		this.baseUrl = context.getString(R.string.autocomplete_url);
+	}
+
+	// the app feels a small bit more responsive to the user
+	// in the first request having warm up the Volley with a request
+	// to the same server
+	// (I guess it setup the host HTTP connection pool, etc)
+	public void warmUp() {
+		String url = MessageFormat.format(baseUrl, "te");
+		JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				// Do nothing
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				// Do nothing
+			}
+		});
+
+		GoEuroApplication.getInstance().addToRequestQueue(request);
 	}
 
 	@Override

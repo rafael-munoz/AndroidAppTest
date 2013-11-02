@@ -1,8 +1,12 @@
 package net.rmv.goeuro;
 
+import java.text.MessageFormat;
 import java.util.Calendar;
 
 import net.rmv.goeuro.util.DateDialogFragment;
+
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +18,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 /**
  * Usually I would do most of this with AndroidAnnotations but let's do it simpler and minimizing dependencies this time
@@ -42,16 +50,20 @@ public class MainActivity extends Activity {
 		selectDateView = (EditText) findViewById(R.id.dateText);
 		selectDateView.setOnClickListener(selectDateListener);
 		selectDateView.setOnFocusChangeListener(selectDateListener);
-		
+
 		AutoCompleteViewListener autoCompleteListener = new AutoCompleteViewListener();
+		
+
+		GoEuroAutoCompleteAdapter adapter = new GoEuroAutoCompleteAdapter(this, R.layout.autocomplete_list);
+		adapter.warmUp();
 
 		fromAutoCompleteView = (AutoCompleteTextView) findViewById(R.id.fromAutoCompleteTextView);
-		fromAutoCompleteView.setAdapter(new GoEuroAutoCompleteAdapter(this, R.layout.autocomplete_list));
+		fromAutoCompleteView.setAdapter(adapter);
 		fromAutoCompleteView.setOnItemClickListener(autoCompleteListener);
 		fromAutoCompleteView.setOnFocusChangeListener(autoCompleteListener);
 
 		toAutoCompleteView = (AutoCompleteTextView) findViewById(R.id.toAutoCompleteTextView);
-		toAutoCompleteView.setAdapter(new GoEuroAutoCompleteAdapter(this, R.layout.autocomplete_list));
+		toAutoCompleteView.setAdapter(adapter);
 		toAutoCompleteView.setOnItemClickListener(autoCompleteListener);
 		toAutoCompleteView.setOnFocusChangeListener(autoCompleteListener);
 	}
@@ -75,7 +87,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	protected void updateDate(Calendar date) {
 		this.selectedDate = date;
 		this.selectDateView.setText(date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
@@ -94,17 +106,17 @@ public class MainActivity extends Activity {
 	private String getTextString(EditText view) {
 		return view.getText().toString().trim();
 	}
-	
+
 	// Listeners
-	
+
 	private class SearchButtonListener implements View.OnClickListener {
 		@Override
 		public void onClick(View view) {
 			Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.search_warning), Toast.LENGTH_LONG).show();
 		}
-		
+
 	}
-	
+
 	private class AutoCompleteViewListener implements OnFocusChangeListener, AdapterView.OnItemClickListener {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
@@ -140,7 +152,7 @@ public class MainActivity extends Activity {
 					MainActivity.this.updateDate(date);
 				}
 			});
-			
+
 			ddf.show(MainActivity.this.getFragmentManager(), "date picker dialog fragment");
 		}
 
