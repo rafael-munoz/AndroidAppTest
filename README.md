@@ -1,7 +1,5 @@
-GoEuro
-======
-
-GoEuro application test. 
+Android App Test
+=================
 
 Techniques
 * Autocomplete fields with server results
